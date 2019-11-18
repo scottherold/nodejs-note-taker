@@ -3,7 +3,7 @@
 const chalk = require('chalk'); // colored console text
 const yargs = require('yargs'); // command line parsing
 // Unique modules
-const getNotes = require('./notes');
+const notes = require('./notes'); // notes utilities
 
 // YARGS SETUP //
 // Customize yargs version
@@ -26,7 +26,7 @@ yargs.command({
         }
     },
     handler: argv => {
-        console.log(`Title: ${argv.title}\nBody: ${argv.body}`)
+        notes.addNote(argv.title, argv.body); // calls the addNote function from teh notes utility file
     }
 });
 
