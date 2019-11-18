@@ -32,11 +32,6 @@ const saveNotes = notes => {
 }
 
 // ** CRUD functions ** //
-// get all notes from JSON
-const getNotes = () => {
-    return 'Your notes...'
-}
-
 // add new note to JSON
 const addNote = (title, body) => {
     const notes = loadNotes();
@@ -88,7 +83,7 @@ const readNote = title => {
     // Searches for provided title; returns immedietly if title is located in note list
     const note = notes.find(note => note.title === title );
     
-    // if note it present
+    // if note present, print, else error
     if (note) {
         console.log(titleFont(note.title));
         console.log(note.body);
@@ -99,7 +94,6 @@ const readNote = title => {
 
 // *** EXPORTS *** //
 module.exports = {
-    getNotes: getNotes,
     addNote: addNote,
     removeNote: removeNote,
     listNotes: listNotes,
