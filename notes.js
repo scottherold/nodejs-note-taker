@@ -1,8 +1,17 @@
 // *** UTILITIES FOR APPLICATION *** //
 
 // *** MODULES *** //
-// global modules
+// ** Global modules **
 const fs = require('fs'); // file system
+
+// ** npm modules **
+const chalk = require('chalk'); // colored console text
+
+// *** VARIABLES *** //
+// Chalk Variables
+const successFont = chalk.bold.green.inverse;
+const errorFont = chalk.bold.red.inverse; 
+const titleFont = chalk.bold.yellow;
 
 // *** FUNCTIONS ***//
 // ** General Functions ** //
@@ -32,27 +41,67 @@ const getNotes = () => {
 const addNote = (title, body) => {
     const notes = loadNotes();
 
-    // Checks for duplicate notes
-    const duplicateNotes = notes.filter(note => {
-        return note.title === title; // if the title is present in any of the notes array, return true, else false
-    });
+    // Checks for duplicate note; return value if found
+    const duplicateNote = notes.find(note => note.title === title );
     
     // Only add unique notes
-    if (duplicateNotes.length === 0) {
+    if (!duplicateNote) {
         // Add note to current notes array
         notes.push({
             title: title,
             body: body
         });
         saveNotes(notes);
-        console.log('New note added!');
+        console.log(successFont('New note added!'));
     } else {
-        console.log('Note title taken!');
+        console.log(errorFont('Note title taken!'));
     }
 }
 
-// EXPORTS  //
+// remove a note from JSON using title
+const removeNote = title => {
+    const notes = loadNotes();
+
+    // Filters array for all objects where title do not match the provided title
+    const notesToKeep = notes.find(note => note.title !== title );
+
+    // Logging for user
+    if (notesToKeep.length === notes.length) {
+        console.log(errorFont("No note found!"));
+    } else {
+        console.log(successFont("Note removed!"));
+        saveNotes(notesToKeep);
+    }
+}
+
+// list all notes
+const listNotes = () => {
+    console.log(titleFont("Your Notes"));
+    const notes = loadNotes();
+    notes.forEach(note => console.log(note.title))
+}
+
+// read one note's title and body
+const readNote = title => {
+    const notes = loadNotes();
+
+    // Searches for provided title; returns immedietly if title is located in note list
+    const note = notes.find(note => note.title === title );
+    
+    // if note it present
+    if (note) {
+        console.log(titleFont(note.title));
+        console.log(note.body);
+    } else {
+        console.log(errorFont('Unable to find note!'));
+    }
+}
+
+// *** EXPORTS *** //
 module.exports = {
     getNotes: getNotes,
-    addNote: addNote
+    addNote: addNote,
+    removeNote: removeNote,
+    listNotes: listNotes,
+    readNote: readNote
 }
